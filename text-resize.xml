@@ -1,0 +1,56 @@
+<!--
+    data-value examples:
+        data-value="'[COMPLICATION.TEXT]'"
+        data-value="'round(pow(10,[SECOND]%8))'"
+ -->
+<Dummy>
+    <Define>
+        WIDTH_PER_CHAR = 1.782  # width in px of '2' at Font size="1"
+        HEIGHT_LIMIT = 0.9      # Maximum Font size per px of PARENT.height
+    </Define>
+
+    <Symbol id="textResizeCompare">
+        <Compare expression="1">    <!-- can be changed by <Use> -->
+            <PartText x="0" y="0" width="{PARENT}" height="{PARENT}">
+                <Text
+                    ellipsis="{'FALSE' if PARENT.expression &lt; 8 else 'TRUE'}"
+                    align="{PARENT.data-align}"
+                >
+                    <Font
+                        family="SYNC_TO_DEVICE"
+                        size="{min(HEIGHT_LIMIT * PARENT.height, WIDTH_PER_CHAR * PARENT.width / min(PARENT.expression,7))}"
+                        color="{PARENT.data-color}">
+                        <Template>%s
+                            <Parameter expression="{PARENT.data-value}" />
+                        </Template>
+                    </Font>
+                </Text>
+            </PartText>
+        </Compare>
+    </Symbol>
+
+    <Symbol id="textResize">
+        <Group name="textResize" data-align="'CENTER'" data-color="'#ffffff'">
+            <Condition>
+                <Expressions>
+                    <Expression name="1">"{PARENT.data-value}" != "" &amp;&amp; textLength({PARENT.data-value}) == 1</Expression>
+                    <Expression name="2">"{PARENT.data-value}" != "" &amp;&amp; textLength({PARENT.data-value}) == 2</Expression>
+                    <Expression name="3">"{PARENT.data-value}" != "" &amp;&amp; textLength({PARENT.data-value}) == 3</Expression>
+                    <Expression name="4">"{PARENT.data-value}" != "" &amp;&amp; textLength({PARENT.data-value}) == 4</Expression>
+                    <Expression name="5">"{PARENT.data-value}" != "" &amp;&amp; textLength({PARENT.data-value}) == 5</Expression>
+                    <Expression name="6">"{PARENT.data-value}" != "" &amp;&amp; textLength({PARENT.data-value}) == 6</Expression>
+                    <Expression name="7">"{PARENT.data-value}" != "" &amp;&amp; textLength({PARENT.data-value}) == 7</Expression>
+                    <Expression name="8">"{PARENT.data-value}" != "" &amp;&amp; textLength({PARENT.data-value}) > 7</Expression>
+                </Expressions>
+                <Use href="textResizeCompare" />    <!-- expression="1" -->
+                <Use href="textResizeCompare" expression="2" />
+                <Use href="textResizeCompare" expression="3" />
+                <Use href="textResizeCompare" expression="4" />
+                <Use href="textResizeCompare" expression="5" />
+                <Use href="textResizeCompare" expression="6" />
+                <Use href="textResizeCompare" expression="7" />
+                <Use href="textResizeCompare" expression="8" />
+            </Condition>
+        </Group>
+    </Symbol>
+</Dummy>
